@@ -15,5 +15,9 @@ jobs:
       uses: actions/setup-node@v1.1.0
     - name: Download script, initiate and assign collaborators
       run: |
-        curl -sSL 'https://raw.githubusercontent.com/salsita/heroku-add-pr-collaborators/init/run.sh'
+        curl -sSL 'https://raw.githubusercontent.com/salsita/heroku-add-pr-collaborators/init/run.sh' > run.sh
+        export HEROKU_API_TOKEN=${{ secrets.HEROKU_API_TOKEN }}
+        export PIPELINES=${{ secrets.PIPELINES }}
+        export PARENT=${{ secrets.PARENT }}
+        export GITHUB_PR_ID=${{ github.event.number }}
         /bin/bash run.sh

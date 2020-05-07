@@ -8,5 +8,5 @@ Example of workflow configuration attached, the file should go to `.github/workf
 
 These environment variables must be set in GitHub Secretes:
 * HEROKU_API_TOKEN
-* PIPELINE (usually in form of uuid, to be found in Heroku's pipeline URL)
+* PIPELINES (*space separated*, usually in form of uuids, to be found in Heroku's pipelines' URLs)
 * PARENT (name of the app from which the collaborators will be copied)
