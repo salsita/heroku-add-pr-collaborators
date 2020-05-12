@@ -2,8 +2,8 @@ const Heroku = require('heroku-client')
 
 const heroku = new Heroku({ token: process.env.HEROKU_API_TOKEN })
 const pipelineId = process.env.PIPELINE
-const parentAppId = process.env.PARRENT
-const prNumber = process.env.GITHUB_PR_ID
+const parentAppId = process.env.PARENT
+const prNumber = Number(process.env.GITHUB_PR_ID)
 
 const copyCollaborators = async () => {
   const apps = await heroku.get(`/pipelines/${pipelineId}/review-apps`)
