@@ -1,0 +1,26 @@
+# .github/workflows/heroku-add-pr-collaborators.yml
+
+name: Add Heroku PR collaborators
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  assign:
+    name: Assign collaborators from parent app to Heroku Review App
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Node.js for use with actions
+      uses: actions/setup-node@v1.1.0
+    - name: Download script, initiate and assign collaborators
+      run: |
+        npm install heroku-client
+        curl -sSL 'https://raw.githubusercontent.com/salsita/heroku-add-pr-collaborators/init/main.js' > main.js
+        export HEROKU_API_TOKEN=${{ secrets.HEROKU_API_TOKEN }}
+        export PIPELINES=${{ secrets.PIPELINES }}
+        export PARENT=${{ secrets.PARENT }}
+        export GITHUB_PR_ID=${{ github.event.number }}
+        for pipeline in $PIPELINES ; do
+          PIPELINE=$pipeline node main.js
+        done
