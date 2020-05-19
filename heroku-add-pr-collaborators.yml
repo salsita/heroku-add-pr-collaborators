@@ -21,6 +21,6 @@ jobs:
         export PIPELINES=${{ secrets.PIPELINES }}
         export PARENT=${{ secrets.PARENT }}
         export GITHUB_PR_ID=${{ github.event.number }}
-        for pipeline in $PIPELINES ; do
+        for pipeline in ${PIPELINES//,/ } ; do
           PIPELINE=$pipeline node main.js
         done
