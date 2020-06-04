@@ -10,17 +10,23 @@ jobs:
   assign:
     name: Assign collaborators from parent app to Heroku Review App
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
     steps:
     - name: Setup Node.js for use with actions
-      uses: actions/setup-node@v1.1.0
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
     - name: Download script, initiate and assign collaborators
+      env:
+        HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
+        PIPELINES: ${{ secrets.PIPELINES }}
+        PARENT: ${{ secrets.PARENT }}
+        GITHUB_PR_ID: ${{ github.event.number }}
       run: |
         npm install heroku-client
         curl -sSL 'https://raw.githubusercontent.com/salsita/heroku-add-pr-collaborators/master/main.js' > main.js
-        export HEROKU_API_TOKEN=${{ secrets.HEROKU_API_TOKEN }}
-        export PIPELINES=${{ secrets.PIPELINES }}
-        export PARENT=${{ secrets.PARENT }}
-        export GITHUB_PR_ID=${{ github.event.number }}
         for pipeline in ${PIPELINES//,/ } ; do
           PIPELINE=$pipeline node main.js
         done
